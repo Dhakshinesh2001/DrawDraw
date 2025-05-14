@@ -18,11 +18,11 @@ app.post('/api/v1/sign-in', (req, res) => {
 });
 
 app.post('/api/v1/sign-up', (req, res) => {
-    res.send('Hello World!');
+    res.json({ message: 'Hello World!' });  
 });
 
 app.post('/api/v1/create-room',authMiddleware, (req, res) => {
-    res.send('Hello World!');
+    res.json({ message: 'Hello World!' });
 });
 
 app.listen(3001, () => {
