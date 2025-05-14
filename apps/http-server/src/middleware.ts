@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { JWTSECRET } from './config';
+import { JWTSECRET } from '@repo/backend-common/config';
 
 interface authRequest extends Request {
     userId?: string;
