@@ -1,9 +1,7 @@
 {
-  "name": "@repo/common",
+  "name": "@repo/db",
   "version": "1.0.0",
-  "exports": {
-    "./types": "./src/types.ts"
-  },
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,9 +12,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
-    "zod": "^3.24.1",
-    "@types/node": "^22.15.3"
+    "prisma": "^6.8.0"
   }
 }
