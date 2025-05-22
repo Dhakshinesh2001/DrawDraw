@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "@types/express": "^5.0.1",
+    "@repo/db": "workspace:*",
     "@types/jsonwebtoken": "^9.0.9",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2"
+    
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
