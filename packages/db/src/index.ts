@@ -1,4 +1,4 @@
-import { PrismaClient } from './generated/prisma/edge'
+import { PrismaClient } from './generated/prisma/index.js'
 
-export const prismaClient = new PrismaClient()
+export const prisma = new PrismaClient()
 // use `prisma` in your application to read and write data in your DB

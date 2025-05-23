@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { JWTSECRET } from '@repo/backend-common/config';
 import { authMiddleware } from './middleware';
 import { CreateUserSchema, SignInSchema, CreateRoomSchema } from '@repo/common/types';
-import { prismaClient } from '@repo/db/client';
+import { prisma } from '@repo/db/client';
 import { Request } from 'express';
 
 
@@ -23,7 +23,7 @@ app.post('/api/v1/sign-in',async (req, res) => {
 
     const data = SignInSchema.safeParse(req.body);
     if(!data.success){
-        res.status(400).json({ message: data.error.message });
+        res.status(400).json({ message: "wrong inputs" });
         return;
     }
     //TODO: check user and password
@@ -33,7 +33,7 @@ app.post('/api/v1/sign-in',async (req, res) => {
     // const userId = "1234";
 
     try{
-        const dbuser = await prismaClient.user.findFirst({
+        const dbuser = await prisma.user.findFirst({
             where: {
                 OR: [
                     { email: email },
@@ -41,14 +41,11 @@ app.post('/api/v1/sign-in',async (req, res) => {
                 ]
             }
         });
-        if(!dbuser){
+        if(!dbuser || dbuser.password !== password){
             res.status(400).json({ message: "Invalid Credentials" });
             return;
         }
-        if(dbuser.password !== password){
-            res.status(400).json({ message: "Invalid Credentials" });
-            return;
-        }
+       
         const token = jwt.sign({ userId: dbuser.id }, JWTSECRET);
         res.status(200).json({ message: "Successfully Signed In", token });
     }catch(e){
@@ -63,15 +60,20 @@ app.post('/api/v1/sign-up', async (req, res) => {
     const parsedData = CreateUserSchema.safeParse(req.body);
     if(!parsedData.success){
         res.status(400).json({ message: parsedData.error.message });
+        // console.log(parsedData.error);
         return;
     }
-    //TODO: save user to database
+    
     try{
-        const user = await prismaClient.user.create({
+        console.log(parsedData.data.email);
+        console.log(parsedData.data.username);
+        console.log(parsedData.data.password);
+        const user = await prisma.user.create({
             data: {
-                email: parsedData.data?.email,
-                name: parsedData.data?.username,
-                password: parsedData.data?.password
+                email: parsedData.data.email,
+                name: parsedData.data.username,
+                password: parsedData.data.password,
+                photo: "asdf"
              }
         });
 
@@ -99,7 +101,7 @@ app.post('/api/v1/create-room',authMiddleware, async (req: authRequest, res) => 
         return;
     }
     try{
-        const room = await prismaClient.room.create({
+        const room = await prisma.room.create({
             data: {
                 slug: parseddata.data.name,
                 
