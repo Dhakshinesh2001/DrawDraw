@@ -119,6 +119,27 @@ app.post('/api/v1/create-room',authMiddleware, async (req: authRequest, res) => 
     
 });
 
+app.get('/api/v1/chats/:roomId', async (req, res) => {  
+
+    const roomId = Number(req.params.roomId);
+    try{
+        const chats = await prisma.chat.findMany({
+            where: {
+                roomId: roomId
+            },
+            orderBy: {
+                id: 'desc'
+            },
+            take: 30
+        });
+        res.status(200).json({ message: 'room found', chats });
+    }catch(e){
+        res.status(500).json({ message: "chat not found" });
+        return;
+    }
+
+});
+
 app.listen(3001, () => {
     console.log('HTTP Server is running on port 3001');
 });
