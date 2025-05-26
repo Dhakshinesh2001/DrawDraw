@@ -15,7 +15,7 @@ interface User {
 const users: User[] = [];
 
 wss.on('connection', (ws, request) => {
-
+    // console.log("connected");
     const url  =  request.url;
 if(!url){
     return;
@@ -38,6 +38,7 @@ if(!url){
 
     ws.on('message', async (data) => {
     const parsedData = JSON.parse(data as unknown as string);
+    // console.log(JSON.stringify(parsedData));
 
         if(parsedData.type === 'join'){
             users.find(x=> x.ws === ws )?.rooms.push(parsedData.roomId);
@@ -59,9 +60,10 @@ await prisma.chat.create({
       userId : parseInt(decoded.userId),
   }
 });
-
+            // console.log("reached line 63");
             users.forEach(user => {
-                if(user.rooms.includes(parsedData.roomId) && user.ws !== ws){
+                if(user.rooms.includes(parsedData.roomId)){
+                    // console.log("reached line ");
                     user.ws.send(JSON.stringify({ type: 'message', roomId: parsedData.roomId, message: parsedData.message }));
                 }
             });

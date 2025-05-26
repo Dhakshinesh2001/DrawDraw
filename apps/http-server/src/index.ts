@@ -4,11 +4,13 @@ import { JWTSECRET } from '@repo/backend-common/config';
 import { authMiddleware } from './middleware';
 import { CreateUserSchema, SignInSchema, CreateRoomSchema } from '@repo/common/types';
 import { prisma } from '@repo/db/client';
-import { Request } from 'express';
+import { Request,Response} from 'express';
 
 
 interface authRequest extends Request {
     userId?: string;
+    slug?: string;
+   
 }
 
 const app = express();
@@ -65,9 +67,9 @@ app.post('/api/v1/sign-up', async (req, res) => {
     }
     
     try{
-        console.log(parsedData.data.email);
-        console.log(parsedData.data.username);
-        console.log(parsedData.data.password);
+        // console.log(parsedData.data.email);
+        // console.log(parsedData.data.username);
+        // console.log(parsedData.data.password);
         const user = await prisma.user.create({
             data: {
                 email: parsedData.data.email,
@@ -132,12 +134,38 @@ app.get('/api/v1/chats/:roomId', authMiddleware, async (req, res) => {
             },
             take: 30
         });
+        // console.log(JSON.stringify(chats));
+        // console.log("reached line 138");
         res.status(200).json({ message: 'room found', chats });
     }catch(e){
+        // console.log("reached line 141");
         res.status(500).json({ message: "chat not found" });
         return;
     }
 
+});
+//@ts-ignore
+app.get('/api/v1/room/:slug', async (req: any, res: any) => {
+    const slug = req.params.slug;
+    try{
+    const room = await prisma.room.findFirst({
+        where: {
+            slug: slug
+        }
+    });
+    if(!room){
+        res.status(404).json({ message: "Room not found" });
+        return;
+    }
+    else{
+        res.status(200).json({ message: "Room found", room,id:room.id });
+        return room;
+    }
+
+}catch(e){
+    res.status(500).json({ message: "Room not found" });
+    return;
+}
 });
 
 app.listen(3001, () => {

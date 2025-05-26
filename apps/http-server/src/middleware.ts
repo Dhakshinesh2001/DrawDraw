@@ -13,11 +13,13 @@ export function authMiddleware(req: authRequest, res: Response, next: NextFuncti
 
     if(decoded) {
         req.userId = decoded.userId;
+        // console.log("Authorized");
         next();
 
     }
     else{
         res.status(401).json({ message: 'Unauthorized' });
+        // console.log("Unauthorized");
     }
 
 }
