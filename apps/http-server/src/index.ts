@@ -119,7 +119,7 @@ app.post('/api/v1/create-room',authMiddleware, async (req: authRequest, res) => 
     
 });
 
-app.get('/api/v1/chats/:roomId', async (req, res) => {  
+app.get('/api/v1/chats/:roomId', authMiddleware, async (req, res) => {  
 
     const roomId = Number(req.params.roomId);
     try{
