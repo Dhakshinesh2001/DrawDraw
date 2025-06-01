@@ -1,6 +1,11 @@
-export function drawShapes(canvas: HTMLCanvasElement) {
+
+
+
+export function drawShapes(canvas: HTMLCanvasElement, shapes: Shape[]) {
     console.log("draw");
     const ctx = canvas.getContext('2d')!;
+
+    let shapesInCanvas: Shape[] = [];
 
     if (!ctx)  return;
 
@@ -18,29 +23,31 @@ export function drawShapes(canvas: HTMLCanvasElement) {
         startY = e.clientY
     })
 
-    canvas.addEventListener('mouseup', (e) => {
+    canvas.addEventListener('mouseup', (e: any) => {
         console.log("up");
         clicked = false;
-         const width = e.clientX - startX;
-            const height = e.clientY - startY;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            console.log("stroking")
-            ctx.strokeStyle = "#ffffff";
-            ctx.strokeRect(startX, startY, width, height);
-        // console.log(e.clientX)
-        // console.log(e.clientY)
+        shapesInCanvas.push({type: "rect", startX, startY, endX: e.clientX, endY: e.clientY});
     })            
 
-    canvas.addEventListener('mousemove', (e) => {
+    canvas.addEventListener('mousemove', (e: any) => {
         if (clicked) {
             const width = e.clientX - startX;
-            const height = e.clientY - startY;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            console.log("stroking");
-            ctx.fillStyle = "#000000";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = "#ffffff";
+            const height = e.clientY - startY;  
+            drawPreviousShapes(canvas, shapesInCanvas, ctx);
+            ctx.strokeStyle = "#FF0000";
             ctx.strokeRect(startX, startY, width, height);
+        }
+    });
+}
+
+
+function drawPreviousShapes(canvas: HTMLCanvasElement, shapes: Shape[], ctx: CanvasRenderingContext2D) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    shapes.forEach(shape => {
+        if (shape.type === "rect") {
+            ctx.strokeRect(shape.startX, shape.startY, shape.endX - shape.startX, shape.endY - shape.startY);
         }
     });
 }
