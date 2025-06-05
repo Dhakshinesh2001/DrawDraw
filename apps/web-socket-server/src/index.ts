@@ -37,7 +37,10 @@ if(!url){
     });
 
     ws.on('message', async (data) => {
+        console.log("message received");
+        console.log(data);
     const parsedData = JSON.parse(data as unknown as string);
+    console.log(JSON.stringify(parsedData));
     // console.log(JSON.stringify(parsedData));
 
         if(parsedData.type === 'join'){
@@ -53,13 +56,19 @@ if(!url){
             ws.send(JSON.stringify({ type: 'leave', roomId: parsedData.roomId,message: "You left the room" }));
         }
         else if(parsedData.type === 'message'){ 
+            console.log("message received");
+            console.log(parsedData);
+            console.log(parsedData.roomId);
+            try{
 await prisma.chat.create({   
   data: {     
       message: parsedData.message,
-      roomId : parseInt(parsedData.roomId),
-      userId : parseInt(decoded.userId),
+      roomId : Number(parsedData.roomId),
+      userId : parseInt(decoded.userId)
   }
-});
+});}catch(e){
+console.log(e);
+}
             // console.log("reached line 63");
             users.forEach(user => {
                 if(user.rooms.includes(parsedData.roomId)){

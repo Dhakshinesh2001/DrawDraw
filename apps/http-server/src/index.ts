@@ -5,6 +5,7 @@ import { authMiddleware } from './middleware';
 import { CreateUserSchema, SignInSchema, CreateRoomSchema } from '@repo/common/types';
 import { prisma } from '@repo/db/client';
 import { Request,Response} from 'express';
+import cors from 'cors';
 
 
 interface authRequest extends Request {
@@ -16,6 +17,8 @@ interface authRequest extends Request {
 const app = express();
 
 app.use(express.json());
+
+app.use(cors());
 
 app.get('/', (req, res) => {
     res.send('Hello World!');

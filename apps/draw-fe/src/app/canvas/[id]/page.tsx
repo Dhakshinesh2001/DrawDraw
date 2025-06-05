@@ -1,25 +1,12 @@
-"use client";
+import CanvasData from "@/components/CanvasData";
 
-import { drawShapes } from "@/Draw";
-import { useEffect,useState, useRef } from "react"
+export default async function DrawPage({params}: {params:{id: string}}) {
 
-export default function DrawPage() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    // const [canvasShapes, setCanvasShapes] = useState<CanvasClass | null>(null);
-    //  let clicked = false;
-    //         let startX = 0;
-    //         let startY = 0;
-    
-    
-    useEffect(() => {
+    const roomId =(await params).id as string;
+    console.log("roomId:");
+    console.log(roomId);
+    console.log(typeof roomId);
 
-        if (canvasRef.current) {
-            drawShapes(canvasRef.current, []);
-        }            
-        },[]);
-      
-    // useEffect(() => {}, [canvasShapes]);
-    return <div>
-        <canvas ref={canvasRef} width={2000} height={1000}></canvas>
-    </div>
+
+    return <CanvasData roomId={roomId} />
 }

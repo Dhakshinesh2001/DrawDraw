@@ -1,51 +1,22 @@
 "use client";
 
+import { drawShapes, endEventListeners } from "@/Draw";
 import { useEffect, useRef } from "react"
 
-export default function Canvas() {
+export default function Canvas({roomId, socket}: {roomId : string, socket: WebSocket}) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    
-    useEffect(() => {
 
-        if (canvasRef.current) {
-            const canvas = canvasRef.current;
-            const ctx = canvas.getContext("2d");
+        useEffect(() => {
 
-            if (!ctx) {
-                return
+            if (canvasRef.current) {
+                drawShapes(canvasRef.current, [], socket, roomId);
             }
-
-            let clicked = false;
-            let startX = 0;
-            let startY = 0;
-
-            canvas.addEventListener("mousedown", (e) => {
-                console.log("down");
-                clicked = true
-                startX = e.clientX
-                startY = e.clientY
-            })
-
-            canvas.addEventListener("mouseup", (e) => {
-                console.log("up");
-                clicked = false
-                console.log(e.clientX)
-                console.log(e.clientY)
-            })            
-
-            canvas.addEventListener("mousemove", (e) => {
-                if (clicked) {
-                    const width = e.clientX - startX;
-                    const height = e.clientY - startY;
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.strokeRect(startX, startY, width, height);
-                }
-            })            
-        }
-
-    }, [canvasRef]);
-
+            return () => {
+                console.log("unmounting");
+                endEventListeners(canvasRef.current);
+            }
+        },[]);
     return <div>
-        <canvas ref={canvasRef} width={500} height={500}></canvas>
+        <canvas ref={canvasRef} width={2000} height={1000}></canvas>
     </div>
 }
