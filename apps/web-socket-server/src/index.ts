@@ -81,5 +81,15 @@ console.log(e);
        
     });
 
+
+    ws.on('close', () => {
+        for (let i = users.length - 1; i >= 0; i--) {
+        if (users[i]?.ws === ws) {
+        users.splice(i, 1);
+    }
+}
+
+    });
+
    
 });
