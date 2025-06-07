@@ -1,6 +1,6 @@
 import CanvasData from "@/components/CanvasData";
-
-export default async function DrawPage({params}: {params:{id: string}}) {
+//@ts-ignore
+export default async function DrawPage({params}: any) {
 
     const roomId =(await params).id as string;
     console.log("roomId:");

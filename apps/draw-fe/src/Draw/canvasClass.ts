@@ -36,8 +36,9 @@ export class CanvasClass {
 
     socketHandler() {
         this.socket.onmessage = (event) => {
+            console.log("onmessage inside class");
             const data = JSON.parse(event.data);
-            console.log(data);
+            console.log(data,"data inside class");
             if(data.type === "message"){
                 const s = JSON.parse(data.message);
                 console.log(s);
@@ -62,6 +63,7 @@ export class CanvasClass {
         console.log(this.shapes);
 
         this.socket.send(JSON.stringify({type: "message", roomId:this.roomId, message: JSON.stringify({type: this.currTool  , startX: this.startX, startY: this.startY, endX: e.clientX, endY: e.clientY})}));
+        console.log("sent:",JSON.stringify({type: "message", roomId:this.roomId, message: JSON.stringify({type: this.currTool  , startX: this.startX, startY: this.startY, endX: e.clientX, endY: e.clientY})}));
     };
 
     handleMouseMove = (e: any)=> {
@@ -105,10 +107,10 @@ export class CanvasClass {
             // this.drawPreviousShapes();
             this.ctx.strokeStyle = "#FF0000";
 
-            if(this.currTool === "rect"){
+            if(shape.type === "rect"){
                 this.ctx.strokeRect(shape.startX,shape.startY, width, height);
             }
-        else if(this.currTool === "circle"){
+        else if(shape.type === "circle"){
                 const centerX = shape.startX + width/2;
                 const centerY = shape.startY + height/2;
                 const radius = Math.max(Math.abs(width/2), Math.abs(height/2));
@@ -125,4 +127,4 @@ export class CanvasClass {
         this.canvas.removeEventListener('mouseup', this.handleMouseUp.bind(this));
         this.canvas.removeEventListener('mousemove', this.handleMouseMove.bind(this));
     }
-}
+} 

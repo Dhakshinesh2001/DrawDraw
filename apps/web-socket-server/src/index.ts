@@ -71,7 +71,7 @@ console.log(e);
 }
             // console.log("reached line 63");
             users.forEach(user => {
-                if(user.rooms.includes(parsedData.roomId)){
+                if(user.rooms.includes(parsedData.roomId) && user.ws!==ws){
                     // console.log("reached line ");
                     user.ws.send(JSON.stringify({ type: 'message', roomId: parsedData.roomId, message: parsedData.message }));
                 }
