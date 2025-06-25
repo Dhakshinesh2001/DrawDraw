@@ -2,13 +2,13 @@ import { type Metadata } from 'next'
 import {
   ClerkProvider,
   SignInButton,
-  SignUpButton,
   SignedIn,
   SignedOut,
   UserButton,
 } from '@clerk/nextjs';
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,8 +37,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-red`}
       > <div className="flex justify-end items-center p-4 gap-4 h-16">
             <SignedOut>
-              <SignInButton />
-              <SignUpButton />
+              <SignInButton >
+                  <button className='absolute top-5 right-5 opacity-25'><img src="user.svg" alt="user" className="w-8 h-8"/></button>
+                </SignInButton>
+              
             </SignedOut>
             <SignedIn>
               <UserButton />
